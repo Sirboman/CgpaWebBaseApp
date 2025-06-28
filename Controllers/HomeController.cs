@@ -1,4 +1,4 @@
-using CgpaWebBaseApp.Models; // Although implicitly used by List, good practice to include
+using CgpaWebBaseApp.Models; 
 using Microsoft.AspNetCore.Mvc;   // Provides core MVC functionalities (like Controller and IActionResult)
 using System.Diagnostics;         // For ErrorViewModel, part of the template
 using System.Collections.Generic;
@@ -24,7 +24,6 @@ namespace CgpaCalculatorWebApp.Controllers
         // this method is executed. It's responsible for displaying the initial form to the user.
         public IActionResult Index()
         {
-             // Create a new instance of our ViewModel.
             // The constructor of CgpaCalculationViewModel will automatically add one empty Course
             // so the user has an initial row to fill out.
             var model = new CgpaCalculationViewModel();
