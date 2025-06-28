@@ -1,0 +1,174 @@
+/* General body styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* A clean, modern font */
+    background-color: #f4f7f6; /* Light gray background */
+    color: #333; /* Dark gray text */
+}
+
+/* Container for the main calculator content */
+.cgpa-container {
+    max-width: 800px; /* Limits the width of the calculator for better readability */
+    margin: 50px auto; /* Centers the container horizontally and adds vertical space */
+    padding: 30px; /* Inner spacing */
+    background-color: #fff; /* White background for the content box */
+    border-radius: 8px; /* Slightly rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Headings styling */
+h1, h3, h4 {
+    color: #0056b3; /* A nice blue color */
+    text-align: center; /* Center-aligns the headings */
+    margin-bottom: 25px; /* Space below headings */
+}
+
+h4 {
+    border-bottom: 1px solid #eee; /* Light gray line below course headings */
+    padding-bottom: 10px; /* Space between heading and line */
+    margin-top: 30px; /* Space above course headings */
+    color: #007bff; /* Lighter blue for course-specific headings */
+}
+
+/* Form group styling (container for label and input) */
+.form-group {
+    margin-bottom: 15px; /* Space between form fields */
+}
+
+/* Styling for all input fields with class 'form-control' (standard Bootstrap styling) */
+.form-control {
+    width: 100%; /* Makes inputs take full width of their container */
+    padding: 10px 12px; /* Inner padding */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 5px; /* Rounded input corners */
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width */
+    font-size: 1rem; /* Standard font size */
+}
+
+    /* Focus state for input fields */
+    .form-control:focus {
+        border-color: #007bff; /* Blue border when focused */
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Blue glow effect */
+        outline: none; /* Removes default browser outline */
+    }
+
+/* General button styling */
+.btn {
+    display: inline-block; /* Allows buttons to sit side-by-side */
+    font-weight: 400; /* Normal font weight */
+    color: #fff; /* White text color */
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer; /* Changes cursor to a pointer on hover */
+    background-color: #007bff; /* Default blue background */
+    border: 1px solid #007bff; /* Matching border color */
+    padding: 10px 20px; /* Inner padding */
+    font-size: 1rem; /* Standard font size */
+    line-height: 1.5;
+    border-radius: 0.25rem; /* Slightly rounded corners */
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Smooth transitions for hover effects */
+    margin-right: 10px; /* Space between buttons */
+    margin-top: 20px; /* Space above buttons */
+}
+
+/* Specific button colors (Bootstrap conventions) */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+        border-color: #0056b3;
+    }
+
+.btn-success {
+    background-color: #28a745; /* Green */
+    border-color: #28a745;
+}
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+
+.btn-danger {
+    background-color: #dc3545; /* Red */
+    border-color: #dc3545;
+}
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+/* Table styling for results section */
+.table {
+    width: 100%; /* Full width */
+    margin-top: 20px; /* Space above the table */
+    border-collapse: collapse; /* Collapses table borders */
+}
+
+    .table th, .table td {
+        padding: 12px; /* Padding inside table cells */
+        border: 1px solid #dee2e6; /* Light gray border for cells */
+        text-align: left; /* Left-aligns text */
+    }
+
+    .table thead th {
+        background-color: #e9ecef; /* Light gray background for table headers */
+        color: #495057; /* Darker text for headers */
+        font-weight: bold; /* Bold text for headers */
+    }
+
+/* Zebra-striping for table rows */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05); /* Light gray for odd rows */
+}
+
+/* Styling for the final CGPA display */
+.cgpa-display {
+    font-size: 1.8rem; /* Larger font size */
+    font-weight: bold; /* Bold text */
+    color: #28a745; /* Green color for emphasis */
+    margin-top: 20px;
+    text-align: center;
+    background-color: #eafbea; /* Very light green background */
+    padding: 15px; /* Inner padding */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #28a745; /* Green border */
+}
+
+/* Styling for validation error messages */
+.text-danger {
+    color: #dc3545; /* Red color */
+    font-size: 0.875em; /* Slightly smaller font size */
+    margin-top: 5px; /* Space above the message */
+    display: block; /* Ensures message appears on its own line */
+}
+
+/* Utility class (Bootstrap) */
+.mt-5 {
+    margin-top: 3rem !important; /* Forces a large top margin */
+}
+
+/* Styling for horizontal rule separator */
+hr {
+    border: 0; /* Remove default border */
+    height: 1px; /* Set height for the line */
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0)); /* Fading gradient line */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Styling for individual course entry blocks */
+.course-entry {
+    padding: 15px;
+    border: 1px solid #e0e0e0; /* Light gray border */
+    border-radius: 5px;
+    margin-bottom: 20px; /* Space between course blocks */
+    background-color: #fdfdfd; /* Very light white background */
+}
+
+footer {
+    z-index:0 auto;
+}

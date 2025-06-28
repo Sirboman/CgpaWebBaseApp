@@ -1,0 +1,170 @@
+﻿@model CgpaWebBaseApp.Models.CgpaCalculationViewModel 
+
+@{
+    ViewData["Title"] = "CGPA Calculator"; // Sets the title for the browser tab. This value is used in _Layout.cshtml.
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to Henry's CGPA Calculator!</h1>
+    <p>Enter your course details below to calculate your CGPA.</p>
+</div>
+
+<div class="cgpa-container">
+    @* This div acts as a main container for our calculator, styled by custom CSS *@
+    <form asp-action="Calculate" method="post">
+
+        @Html.AntiForgeryToken() @* Generates a hidden anti-forgery token. This is a security measure that works with [ValidateAntiForgeryToken] in the controller to prevent CSRF attacks. *@
+
+        <div id="courses-container">
+            @* This div will hold all  added course input blocks. *@
+            <h3>Enter Course Information</h3>
+            @* Iterates through the 'Courses' list in our ViewModel. *@
+              
+            @for (int i = 0; i < Model.Courses.Count; i++)
+            {
+       
+                <div class="course-entry" id="course-entry-@i">
+                    @* Assign a unique ID for JavaScript manipulation. *@
+                    <h4>Course @(i + 1)</h4> @* Displays "Course 1", "Course 2", etc. *@
+                    <div class="form-group">
+                        <label asp-for="Courses[i].Name" class="control-label"></label> 
+                        <input asp-for="Courses[i].Name" class="form-control" placeholder="e.g., ENG 101" /> 
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Courses[i].Score" class="control-label"></label>
+                        <input asp-for="Courses[i].Score" class="form-control" type="number" min="0" max="100" /> @* type="number" ensures only numbers can be entered. min/max add basic client-side validation. *@
+                        <span asp-validation-for="Courses[i].Score" class="text-danger"></span> @* Tag Helper: Displays validation messages for the Score property.
+                                                                                                  - If server-side validation (e.g., [Range] attribute on Score if we added it to Course.cs) fails, the message appears here. *@
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Courses[i].Unit" class="control-label"></label>
+                        <input asp-for="Courses[i].Unit" class="form-control" type="number" min="1" />
+                        <span asp-validation-for="Courses[i].Unit" class="text-danger"></span>
+                    </div>
+                    
+                    @if (i > 0)
+                    {
+                        <button type="button" class="btn btn-danger remove-course-btn" data-course-index="@i">Remove Course</button> @* data-course-index stores the index for JavaScript to use. *@
+                    }
+                    <hr />
+                </div>
+            }
+        </div>
+
+        @* Buttons to add more courses or submit the form. *@
+        <button type="button" class="btn btn-primary" id="add-course-btn">Add Another Course</button>
+        <button type="submit" class="btn btn-success">Calculate CGPA</button>
+
+        @* This displays any model-level validation errors (e.g., "Please add at least one course" from ViewModel's [Required] or controller's ModelState.AddModelError) *@
+        <div asp-validation-summary="ModelOnly" class="text-danger mt-3"></div>
+
+    </form>
+
+    @* Display Results Section: Rendered IF a calculation has occurred.
+       Model.TotalUnits will be greater than 0 only after a successful calculation. *@
+    @if (Model.TotalUnits > 0)
+    {
+        <div class="cgpa-results mt-5">
+            @* mt-5 is a Bootstrap class for margin-top: 3rem *@
+            <h3>Semester Summary</h3>
+            <table class="table table-bordered table-striped">
+               
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Score</th>
+                        <th>Grade</th>
+                        <th>Unit</th>
+                        <th>Grade Point</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @* Loop through the courses again to display their details in a table. *@
+                    @foreach (var course in Model.Courses)
+                    {
+                        <tr>
+                            <td>@course.Name</td>
+                            <td>@course.Score</td>
+                            <td>@course.GradeLetter</td>
+                            <td>@course.Unit</td>
+                            <td>@course.GradePoint</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <p><strong>Total Units:</strong> @Model.TotalUnits</p>
+            <p><strong>Total Grade Points:</strong> @Model.TotalGradePoints</p>
+            <p class="cgpa-display"><strong>Your CGPA is:</strong> @Model.Cgpa.ToString("F2")</p> @* F2 formats the double to two decimal places. *@
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @* This section is where we place JavaScript code. It will be rendered at the end of the <body> in _Layout.cshtml. *@
+    @{
+        // This partial view includes jQuery validation scripts. It enables client-side validation,
+        // meaning the browser can check some rules (like required fields, number ranges)
+        // before sending the form to the server.
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // This ensures our JavaScript runs only after the entire HTML document is loaded.
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize a counter for newly added courses. This is important for correctly
+            // naming input fields so ASP.NET Core's model binder can map them.
+            // We start from the current count of courses in the model.
+            let courseIndex = @Model.Courses.Count;
+
+            // Get a reference to the "Add Another Course" button.
+            document.getElementById('add-course-btn').addEventListener('click', function () {
+                const container = document.getElementById('courses-container'); // Get the container where course entries are added.
+
+                // Construct the HTML for a new course entry.
+                // The 'name' and 'id' attributes of the input fields MUST follow
+                // the pattern 'Courses[index].PropertyName' (e.g., Courses[0].Name, Courses[1].Score).
+                const newCourseHtml = `
+                    <div class="course-entry" id="course-entry-${courseIndex}">
+                        
+                        <h4>Course ${courseIndex + 1}</h4>
+
+                        <div class="form-group">
+                            <label for="Courses_${courseIndex}__Name" class="control-label">Name</label>
+                            
+                            <input class="form-control" type="text" id="Courses_${courseIndex}__Name" name="Courses[${courseIndex}].Name" placeholder="e.g., ENG 101"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Courses_${courseIndex}__Score" class="control-label">Score</label>
+                            <input class="form-control" type="number" min="0" max="100" id="Courses_${courseIndex}__Score" name="Courses[${courseIndex}].Score" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Courses_${courseIndex}__Unit" class="control-label">Unit</label>
+                            <input class="form-control" type="number" min="1" id="Courses_${courseIndex}__Unit" name="Courses[${courseIndex}].Unit" />
+                        </div>
+                        <button type="button" class="btn btn-danger remove-course-btn" data-course-index="${courseIndex}">Remove Course</button>
+                        <hr />
+                    </div>
+                `;
+                // Insert the new HTML before the end of the courses-container div.
+                container.insertAdjacentHTML('beforeend', newCourseHtml);
+                // Increment the index for the next new course.
+                courseIndex++;
+            });
+
+            // Event Delegation for "Remove Course" buttons:
+           // we add one listener to their parent container (#courses-container).
+          // When a click event comes up, we check if the clicked element has the 'remove-course-btn' class.
+            document.getElementById('courses-container').addEventListener('click', function (event) {
+                if (event.target.classList.contains('remove-course-btn')) {
+                    const indexToRemove = event.target.dataset.courseIndex; // Get the index from the data-course-index attribute.
+                    const courseEntry = document.getElementById(`course-entry-${indexToRemove}`); // Find the parent div of the course entry.
+                    if (courseEntry) {
+                        courseEntry.remove(); // Remove the entire course entry div from the DOM.                      
+                    }
+                }
+            });
+        });
+    </script>
+}
