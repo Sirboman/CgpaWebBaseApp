@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic; // Required for List<T>
-using System.ComponentModel.DataAnnotations; // Required for [Required] and other data annotations
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CgpaWebBaseApp.Models
 {
-    // This ViewModel is designed to hold all the data needed for the CGPA calculation page.
-    // It serves two purposes:
-    // 1. To send initial data (like an empty course form) from the Controller to the View.
-    // 2. To receive submitted data (the list of courses) from the View back to the Controller.
-    // 3. To hold the calculated results (CGPA, TotalUnits, TotalGradePoints) to display back to the View.
-    public class CgpaCalculationViewModel
+        public class CgpaCalculationViewModel
     {
 
         [Required(ErrorMessage = "Please add at least one course.")]
